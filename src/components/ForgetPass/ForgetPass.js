@@ -13,7 +13,15 @@ function ForgetPass(props) {
 
   const clickToSend = (event) =>{
     event.preventDefault();
-    
+    axios.post('/password',{
+      email : email,
+      redirect_url: 'http://localhost:8080/resetPass'
+    }).then(res =>{
+      dispatch(actions.changeStatusLogin('login'))
+    }).catch((err) =>{
+      setDisplayAlert('');
+    })
+ 
   }
   return (
     <div className='container'>
