@@ -15,7 +15,25 @@ function ChangePass(props) {
   const clickToSave = (event) => {
     event.preventDefault();
     event.stopPropagation()
-   
+    axios.put('/password', {
+      password: passwordChange,
+      password_confirmation: passConfirm,
+      current_password: passwordCurrent,
+    },
+      {
+        headers: {
+          'access-token': GetCookie('access-token'),
+          uid: GetCookie('uid'),
+          client: GetCookie('client')
+        }
+      }).then(
+        res => {
+          setShowSuccess(true);
+        }
+      ).catch((err) => {
+        setShowDanger(true);
+      })
+
   }
 
 
@@ -46,7 +64,7 @@ function ChangePass(props) {
               </Col>
               <Col sm={8}>
                 <FormControl type='password' style={{ maxWidth: '100%' }}
-                 onChange={e => dispatch(actions.checkPassCurrent(e.target.value))} />
+                  onChange={e => dispatch(actions.checkPassCurrent(e.target.value))} />
               </Col>
             </Row>
             <Row style={{ marginTop: 30 }}>
@@ -55,7 +73,7 @@ function ChangePass(props) {
               </Col>
               <Col sm={8}>
                 <FormControl type='password' style={{ maxWidth: '100%' }}
-                onChange={e => dispatch(actions.changePassAfLog(e.target.value))} />
+                  onChange={e => dispatch(actions.changePassAfLog(e.target.value))} />
               </Col>
             </Row>
             <Row style={{ marginTop: 30 }}>
@@ -64,7 +82,7 @@ function ChangePass(props) {
               </Col>
               <Col sm={8}>
                 <FormControl type='password' style={{ maxWidth: '100%' }}
-                onChange={e => dispatch(actions.checkPassConfirm(e.target.value))} />
+                  onChange={e => dispatch(actions.checkPassConfirm(e.target.value))} />
               </Col>
             </Row>
             <Row style={{ marginTop: 30 }}>

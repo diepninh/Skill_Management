@@ -15,7 +15,25 @@ function ChangePass(props) {
   const clickToSave = (event) => {
     event.preventDefault();
     event.stopPropagation()
-    
+    axios.put('/password', {
+      password: passwordChange,
+      password_confirmation: passConfirm,
+      current_password: passwordCurrent,
+    },
+      {
+        headers: {
+          'access-token': GetCookie('access-token'),
+          uid: GetCookie('uid'),
+          client: GetCookie('client')
+        }
+      }).then(
+        res => {
+          setShowSuccess(true);
+        }
+      ).catch((err) => {
+        setShowDanger(true);
+      })
+ 
   }
 
 
