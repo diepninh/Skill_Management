@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import bunbu from '../../image/bunbu.png';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '../../Actions/index.js';
 import axios from '../../axios.js';
 import { useLocation } from 'react-router-dom';
@@ -10,13 +10,31 @@ import { useLocation } from 'react-router-dom';
 function ResetPassword(props) {
   const [displayAlert, setDisplayAlert] = useState('none');
   const password = useSelector(state => state.SignIn.passReset);
-  const passConf = useSelector( state => state.SignIn.passResetConfirm);
+  const passConf = useSelector(state => state.SignIn.passResetConfirm);
   const dispatch = useDispatch();
   const queryString = require('query-string');
   const headersUrl = queryString.parse(useLocation().search);
   const clickToSend = (event) => {
     event.preventDefault();
-    
+    axios.put('/password',
+      {
+        password: password,
+        password_confirmation: passConf,
+      }, {
+      headers:
+      {
+        'access-token': headersUrl['access-token'],
+        uid: headersUrl.uid,
+        client: headersUrl.client,
+      }
+    }).then(
+      res => {
+        dispatch(actions.changeStatusLogin('login'))
+      }
+    ).catch((err) => {
+      setDisplayAlert('');
+    })
+
   }
 
   return (
@@ -42,8 +60,8 @@ function ResetPassword(props) {
           </div>
           <div className='form-group'>
             <label></label>
-            <input type='password' className='form-control form-control-lg' placeholder='Confirm your password' 
-            onChange={e => dispatch(actions.getPassResetConf(e.target.value))}/>
+            <input type='password' className='form-control form-control-lg' placeholder='Confirm your password'
+              onChange={e => dispatch(actions.getPassResetConf(e.target.value))} />
           </div>
           <button type='submit' className='btn btn-primary mt-5 button btn-lg btn-block'>Send</button>
         </form>
